@@ -51,12 +51,12 @@ requirejs.config({
 //prevent context menu
 document.oncontextmenu = function(){ return false; };
 
-requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'app/tag-types','app/class-tag-types', 'app/css','jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, tag_types,class_tag_types,  css, $){
+requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'app/tag-types','app/class-tag-types', 'app/css','jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, tag_types,  class_tag_types,  css, $){
 
   ko.applyBindings(main_window, $('body')[0]);
-  tag_types.init().done(function(){
-    css.refreshRules();
-  });
+  // tag_types.init().done(function(){
+  //   css.refreshRules();
+  // });
   class_tag_types.init().done(function(){
     css.refreshRules();
   });
@@ -110,6 +110,35 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
     });
   })
 
+  crossroads.addRoute('/trains/{id}/{file}', function(id, file){
+    console.log("===================================================")
+    console.log(id)
+    console.log(file)
+    console.log("===================================================")
+    $('#widget-canvas').empty();
+    var el = $('<div>', { "style": "height: 100%;overflow: scroll;"}).appendTo($('#widget-canvas'));
+    $.ajax({
+      url:'data/file_id',
+      type:"POST",
+      data:JSON.stringify({"file_id":file}),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+      }).done(function(resp){
+        tag_types.init(resp).done(function(){
+            css.refreshRules();
+          });
+      console.log('DONE')
+});
+
+
+
+    require(['app/markup'], function(markup){
+      markup.render(el, id);
+    });
+  })
+
+
+
   
   crossroads.addRoute('/test/:id:', function(id){
     $('#widget-canvas').empty();
@@ -120,6 +149,7 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
   })
 
   crossroads.routed.add(function(req, data){
+    // alert("routed")
     console.log('routed: ' + req);
     console.log(data.route +' - '+ data.params +' - '+ data.isFirst);
   });

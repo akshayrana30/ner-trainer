@@ -153,7 +153,7 @@ def server_save_complete(*args, **kwargs):
 
 def save_tags(*args, **kwargs):
     data = kwargs.get('types')
-    spit("{}/js/types.json".format(WEB_ROOT), json.dumps({ 'types' : data }), True)
+    spit("{}/js/types_ner.json".format(WEB_ROOT), json.dumps({ 'types' : data }), True)
     return { 'saved': 'SUCCESS' }
 
 
@@ -180,14 +180,14 @@ def createTraining(text, _id):
 def create_json(*args, **kwargs):
     text = kwargs.get('text')
     print text
-    with open('js/types.json', 'w') as outfile:
+    with open('js/types_ner.json', 'w') as outfile:
         json.dump(text, outfile)
 
 # #POST /data/create_json2 {'text'} 
 def create_json2(*args, **kwargs):
     text = kwargs.get('text')
     print text
-    with open('js/types2.json', 'w') as outfile:
+    with open('js/types_classification.json', 'w') as outfile:
         json.dump(text, outfile)
 
 # #POST /data/find_models  
@@ -208,6 +208,15 @@ def tokenize_with_offsets_mod(text):
         main_list.append(inner_list)
     return main_list
 
+def file_id(*args, **kwargs):
+    id = kwargs.get('file_id')
+    # Database query
+    return json.dumps(id)
+
+
+
+
+
 actions = {
     "last_save":  last_save
 }
@@ -222,7 +231,8 @@ post_actions = {
     "parse_tsv" : parse_tsv,
     "create_json" :create_json,
     "create_json2":create_json2,
-    "find_models" :find_models
+    "find_models" :find_models, 
+    "file_id": file_id
 }
 
 def unknown(*args):

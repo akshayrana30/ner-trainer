@@ -30,10 +30,14 @@ define(['underscore-contrib', 'app/tag-types', 'app/class-tag-types', 'app/utils
 
   var refreshRules = function(){
     var types = tag_types.getTags();
+    var class_types = class_tag_types.getTags();
     for(;sheet.cssRules.length > 0;){
       sheet.deleteRule(0);
     }
     types.forEach(function(t){
+      setRule("." + t.text, t.color);
+    });
+    class_types.forEach(function(t){
       setRule("." + t.text, t.color);
     });
   };

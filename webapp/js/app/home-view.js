@@ -86,6 +86,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       contentType:"application/json; charset=utf-8",
       dataType:"json"
     }).done(function(resp){
+      alert("HE")
       console.log("HAHAHAH")
       console.log(resp);
       result_msg($('<O_o>').append(
@@ -382,6 +383,9 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       };
 
       var train_spacy = function(){
+        $('#loader').css('display','block');
+        document.getElementById("modalTrain").value = "Training";
+
         console.log(document.getElementById("path_to"))
         console.log(document.getElementById("iter"))
         console.log(document.getElementById("loadText"))
@@ -423,18 +427,26 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
           }).done(function(resp){
             console.log(resp);
             localStorage.setItem('path',resp.path);
-            alert("Model created with accuracy :  "+resp.accuracy);
+            $('#loader').css('display','none');
+            document.getElementById("modalTrain").value = "Train";
+            document.getElementById("loader_text").innerHTML = "Your model "+path_to+" is ready."
+            $('#loader_text').css('display','block');
           }).fail(function(){
+            $('#loader').css('display','none');
+            document.getElementById("modalTrain").value = "Train";
+            document.getElementById("loader_text").innerHTML = "Service Failure !!"
+            $('#loader_text').css('display','block');
             console.log("save failed");
           });
         };
         
       var test_spacy_handler = function(){
+        $('#loader_test').css('display','block');
+
         var model = ''
         var e = document.getElementById("sel2");
         model = e.options[e.selectedIndex].text;
         var input_text = document.getElementById("input_text").value;
-
         $.ajax({
           url:'http://localhost:5000/predict_ner',
           type:"POST",
@@ -446,10 +458,18 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
           contentType:"application/json; charset=utf-8",
           dataType:"json"
         }).done(function(resp){
-          alert(resp);
+          var output = '';
+          for(var i=0; i<resp.length; i++){
+           output += resp[i].text + " : " + resp[i].label + "<br>";
+          }
+          $('#loader_test').css('display','none');
+          document.getElementById("predicted_text").innerHTML = output
+          $('#predicted_text').css('display','block');
           // localStorage.setItem('path',resp.path);
         }).fail(function(){
-          console.log("test failed");
+          $('#loader_test').css('display','none');
+          document.getElementById("predicted_text").innerHTML = "Service Failure !!"
+          $('#predicted_text').css('display','block');
         });
         
       

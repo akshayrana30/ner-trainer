@@ -6,16 +6,23 @@ define(['underscore-contrib','d3','jquery'], function(_, d3, $){
   var init = function(){
     console.log("---- INSIDE CLASS TAGS ----")
     return $.ajax({
-      url:'js/types2.json',
+      url:'js/types_classification.json',
       type:"GET",
       contentType:"application/json; charset=utf-8"}).done(function(resp){
         
-        // **** WINDOWS ****
-        temp = JSON.parse(resp)
-        tags = temp.types;
-
-        // **** LINUX ****
-        // tags = resp.types;
+        if (navigator.appVersion.indexOf("Win")!=-1){
+          // **** WINDOWS ****
+          temp = JSON.parse(resp)
+          tags = temp.types;
+          }
+          else if (navigator.appVersion.indexOf("Linux")!=-1){
+          // **** LINUX ****
+          tags = resp.types
+          temp = resp;
+          }
+          else{
+            alert("OS Version not identified. Make changes manually in markup_view.html")
+          }
 
       });
   };

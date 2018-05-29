@@ -48,6 +48,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
 
       var navigate_home = _.partial(utils.navigate, routes.HOME())
       var navigate_next = function () {
+        console.log(data.trainings())
         count = count + 1;
         var i = _.last(utils.current_route_array());
         // console.log("=========================")                
@@ -72,8 +73,6 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       };
 
       var tagDataWithPrediction = function(j){
-        // console.log("*************************************")
-        // console.log(data.trainings()[j])
           $.ajax({
             url:'http://localhost:5000/predict',
             type:"POST",
@@ -83,14 +82,9 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
           }).done(function(resp){
           console.log(resp);
           for(var i in resp){
-            // console.log("INSIDE RESPONSE")
             var start = parseInt(resp[i].start)
             var end = parseInt(resp[i].end)
-            var tag = resp[i].tag
-            // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-            // console.log(start)
-            // console.log(end)
-            // console.log(tag)            
+            var tag = resp[i].tag       
             data.addTag(j, start, end , tag)
             utils.navigate(routes.TRAIN(j));
           }
@@ -110,16 +104,14 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       console.log(" --- INSIDE JS ---")
       var entity_types = ko.observableArray(tag_types.getTags());
       console.log(entity_types)
-      var class_types = ko.observableArray(class_tag_types.getTags());
-      console.log(class_types)
+      // var class_types = ko.observableArray(class_tag_types.getTags());
+      // console.log(class_types)
 
-      var classify_types = ko.observableArray(class_tag_types.getTags());
+      // var classify_types = ko.observableArray(class_tag_types.getTags());
 
       var currentType = ko.observable(_.first(tag_types.getTags()));
       var setSelectedType = function(type){
         return function(){
-          // console.log("HeLLO")
-          // console.log(type)
           currentType(type);
         };
       };
@@ -294,7 +286,61 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
         alert("Helloo");
       };
 
-
+      var add_subtract_tags = function(call_url, write_url,func){
+        // alert(call_url, write_url,func)
+        var CSS_COLOR_NAMES = ["AliceBlue",,"Aqua","Aquamarine","Azure","Bisque","Black","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick",,"ForestGreen","Fuchsia","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","WhiteSmoke","Yellow","YellowGreen"];
+        var tags = '';
+        $.ajax({
+        url:call_url,
+        type:"GET",
+        contentType:"application/json; charset=utf-8"}).done(function(resp){
+          if (navigator.appVersion.indexOf("Win")!=-1){
+          // **** WINDOWS ****
+          temp = JSON.parse(resp)
+          tags = temp.types;
+          }
+          else if (navigator.appVersion.indexOf("Linux")!=-1){
+          // **** LINUX ****
+          tags = resp.types
+          temp = resp;
+          }
+          else{
+            alert("OS Version not identified. Make changes manually in markup_view.html")
+          }
+          $('#myModal').modal();
+          $('#modalYes').on('click',function(){
+            $('#btnText').focus();
+            var getTextField=$("#btnText").val();
+            $("#btnText").val("");
+            console.log(getTextField);
+    
+            if(func==="add"){
+                if(getTextField!=""){
+                  var rand = CSS_COLOR_NAMES[Math.floor(Math.random() * CSS_COLOR_NAMES.length)];
+                }
+                tags.push({"color":rand, "text":getTextField.toLowerCase()})
+            }
+    
+          else if(func==="subtract"){
+            var index = 0
+            for (var i = 0; i < tags.length; i++) {
+                if(tags[i].text === getTextField.toLowerCase()){
+                  index = i
+                }
+              }
+            tags.splice(index, 1)
+          }
+            $.ajax({
+        url:write_url,
+        type:"POST",
+        data:JSON.stringify({ 'text' : temp }),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"
+      }).done();
+      location.reload();   
+       });
+      });
+    }
       ko.applyBindings({ 
         'id' : id,
         'entity_types' : entity_types,
@@ -306,6 +352,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
         'navigate_prev' : navigate_prev, 
         'navigate_home': navigate_home, 
         'akshay' : akshay,
+        'add_subtract_tags':add_subtract_tags,
         'navigate_next' : navigate_next }, el[0]);
         
 
