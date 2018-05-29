@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>NER Trainer</title>
+    <link href= "css/bootstrap.min.css" rel= "stylesheet">
+    <link href= "css/colorpicker.css" rel= "stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style id="custom-style">
+    </style>
+  </head>
+  <body>
+    <header class= "navbar navbar-default" role= "navigation">
+      <div class= "container-fluid">
+        <div class= "navbar-header">
+          <a class= "navbar-brand" href= "#/home">NER Trainer</a>
+        </div>
+        <div class="nav navbar-nav navbar-right" style="padding-top: 3px; padding-right: 10px;">
+          last saved: <span id="last_save"> - </span>
+        </div>
+      </div>
+    </header>
+    <div class= "window-container">
+      <div id= "widget-canvas" data-bind="css: cssBodyView"></div>
+      <div class= "right-panel"></div>
+    </div>
+    <script data-main="js/app/main-app" src="js/lib/require-min.js"></script>
+  </body>
+</html>

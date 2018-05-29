@@ -1,0 +1,178 @@
+* {
+    overflow-wrap: break-word;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+ul.none { list-style-type: none; margin: 0; padding: 0; }
+
+.window-container {
+    height: calc(100% - 50px);
+    width: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+.window-component {
+    height: 100%;
+    width: 100%;
+}
+
+.panel-visible {
+    /*left: 200px;*/
+    width: calc(100% - 300px); 
+    float: left;
+}
+
+.search-show { 
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.search-hide { 
+    display: none;
+}
+
+.right-panel {
+    width: 300px;
+    padding: 5px;
+    background-color: #f8f8f8;
+    float: left;
+    height: 100%;
+    
+}
+
+.right-panel > div {
+    margin: 5px;
+}
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    fill: none;
+    stroke: #bbb;
+}
+
+.btn-size { 
+    width: 150px;
+}
+
+.markup-container {
+    margin: 10px;
+}
+.markup-container > span {
+    padding-right: 5px;
+}
+
+.table-container {
+    margin-left: 10px;
+}
+
+.table-container > table thead {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.table-container > table tbody tr:first-child td {
+    padding-top: 8px;
+}
+
+.table-container > table tbody tr td {
+    text-align: center;
+}
+
+.table-container > table tbody tr td:nth-child(2) {
+    text-align: left;
+}
+
+.table-container > table tbody tr td:nth-child(3) {
+    min-width: 500px;
+    text-align: left;
+}
+
+
+.table-container > table tr th {
+    margin: 5px;
+    padding: 2px 15px 5px 0px;
+}
+
+.table-container > table tr.hover td {
+    background-color: #ffffae;
+}
+
+.table-container > table tr td {
+    margin: 5px;
+    padding: 0px 15px 5px 0px;
+}
+
+.tag {
+    font-weight: bold;
+    display: inline;
+    vertical-align: bottom;    
+    margin-right: 2px;
+    padding-left: 5px;
+    border-radius: 5px;
+}
+
+.tag>span {
+    padding-right: 5px;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+    display: inline;
+    vertical-align: bottom;
+}
+
+div.tag.highlight {
+    border: 1px solid yellow;
+}
+
+
+.highlight>span {
+    padding-right: 5px;
+}
+
+.pad-child>span {
+    padding-right: 5px;
+}
+
+*.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.sample_input:before {
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "Sample Input";
+}
+
+.text_tokens > div {
+    border: 1px solid #000;
+    margin: 2px;
+}
+
+/** bootstrap override **/
+.navbar {
+    margin-bottom: 0px;
+    border: 0px;
+}
+
+.popover {
+    overflow: visible;
+}

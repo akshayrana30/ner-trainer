@@ -1,0 +1,274 @@
+<h5>  NER Tags</h5>
+<div style="padding: 5px; position: absolute;">
+  <div class="btn-group" role="group" data-bind="foreach: entity_types">
+    <button type="button" class="btn btn-default"
+            data-bind="click : $parent.selectedType($data), attr: { 'data-type' : $data.text }, style : { 
+                       'background-color' : $parent.selectedFn($data)
+                       }">
+      <div style="border-bottom-width: 10px; border-bottom-style: solid; text-transform: capitalize;" 
+           data-bind="style : { 'border-bottom-color' : $data.color }, text: $data.text"></div>
+    </button>
+  </div>
+
+  <button type="button" class=" addbutton_entity btn btn-default btn-sm">
+    <span class="glyphicon glyphicon-plus"></span>
+  </button>
+  <button type="button" class=" subtractbutton_entity btn btn-default btn-sm">
+      <span class="glyphicon glyphicon-minus"></span>
+    </button>
+
+  <br>
+  <h5>Document Classification Tags</h5>
+
+  <div class="btn-group" role="group" data-bind="foreach: class_types">
+    <button type="button" class="btn btn-default"
+            data-bind="click : $parent.selectedType($data), attr: { 'data-type' : $data.text }, style : { 
+                       'background-color' : $parent.selectedFn($data)
+                       }">
+      <div style="border-bottom-width: 10px; border-bottom-style: solid; text-transform: capitalize;" 
+           data-bind="style : { 'border-bottom-color' : $data.color }, text: $data.text"></div>
+    </button>
+  </div>
+  <button type="button" class=" addbutton_classify btn btn-default btn-sm">
+    <span class="glyphicon glyphicon-plus"></span>
+  </button>
+  <button type="button" class=" subtractbutton_classify btn btn-default btn-sm">
+      <span class="glyphicon glyphicon-minus"></span>
+    </button>
+    
+    <div id="area"/></div>
+
+
+    
+  <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Label name</h4>
+          </div>
+          <div class="modal-body">
+            <span><input type="text"  id="btnText" class="form-control" placeholder="text"></span>
+          </div>
+          <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">no</button> -->
+            <button type="button" id="modalYes" class="btn btn-default" data-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  <script>
+     $('.addbutton_entity').on('click',function(){
+      var CSS_COLOR_NAMES = ["AliceBlue",,"Aqua","Aquamarine","Azure","Bisque","Black","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick",,"ForestGreen","Fuchsia","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","WhiteSmoke","Yellow","YellowGreen"];
+      var tags = '';
+      $.ajax({
+      url:'js/types.json',
+      type:"GET",
+      contentType:"application/json; charset=utf-8"}).done(function(resp){
+        // **** WINDOWS ****
+        temp = JSON.parse(resp)
+        tags = temp.types;
+
+        // **** LINUX ****
+        // tags = resp.types
+
+        $('#myModal').modal();
+        $('#modalYes').on('click',function(){
+          $('#btnText').focus();
+          var getTextField=$("#btnText").val();
+          $("#btnText").val("");
+          console.log(getTextField);
+          if(getTextField!=""){
+            var rand = CSS_COLOR_NAMES[Math.floor(Math.random() * CSS_COLOR_NAMES.length)];
+          }
+          tags.push({"color":rand, "text":getTextField.toLowerCase()})
+          $.ajax({
+      url:'data/create_json',
+      type:"POST",
+      data:JSON.stringify({ 'text' : temp }),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+    }).done();
+    location.reload(true);
+
+     });
+      });
+ 
+      });
+
+$('.addbutton_classify').on('click',function(){
+      var CSS_COLOR_NAMES = ["AliceBlue",,"Aqua","Aquamarine","Azure","Bisque","Black","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick",,"ForestGreen","Fuchsia","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","WhiteSmoke","Yellow","YellowGreen"];
+      var tags = '';
+      $.ajax({
+      url:'js/types2.json',
+      type:"GET",
+      contentType:"application/json; charset=utf-8"}).done(function(resp){
+        // **** WINDOWS ****
+        temp = JSON.parse(resp)
+        tags = temp.types;
+
+        // **** LINUX ****
+        // tags = resp.types
+
+        $('#myModal').modal();
+        $('#modalYes').on('click',function(){
+          $('#btnText').focus();
+          var getTextField=$("#btnText").val();
+          $("#btnText").val("");
+          console.log(getTextField);
+          if(getTextField!=""){
+            var rand = CSS_COLOR_NAMES[Math.floor(Math.random() * CSS_COLOR_NAMES.length)];
+          }
+          tags.push({"color":rand, "text":getTextField.toLowerCase()})
+          $.ajax({
+      url:'data/create_json2',
+      type:"POST",
+      data:JSON.stringify({ 'text' : temp }),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+    }).done();
+    location.reload(true);
+
+     });
+      });
+ 
+      });
+
+      $('.subtractbutton_entity').on('click',function(){
+      var tags = '';
+      var index = 0;
+      $.ajax({
+      url:'js/types.json',
+      type:"GET",
+      contentType:"application/json; charset=utf-8"}).done(function(resp){
+        // **** WINDOWS ****
+        temp = JSON.parse(resp)
+        tags = temp.types;
+
+        // **** LINUX ****
+        // tags = resp.types
+        $('#myModal').modal();
+        $('#modalYes').on('click',function(){
+          $('#btnText').focus();
+          var getTextField=$("#btnText").val();
+          $("#btnText").val("");
+          console.log(getTextField);
+          
+          for (var i = 0; i < tags.length; i++) {
+              if(tags[i].text === getTextField.toLowerCase()){
+                index = i
+              }
+            }
+          tags.splice(index, 1)
+          $.ajax({
+      url:'data/create_json',
+      type:"POST",
+      data:JSON.stringify({ 'text' : temp }),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+    }).done();
+    location.reload(true);
+
+     });
+      });
+ 
+      });
+
+
+      $('.subtractbutton_classify').on('click',function(){
+      var tags = '';
+      var index = 0;
+      $.ajax({
+      url:'js/types2.json',
+      type:"GET",
+      contentType:"application/json; charset=utf-8"}).done(function(resp){
+        // **** WINDOWS ****
+        temp = JSON.parse(resp)
+        tags = temp.types;
+
+        // **** LINUX ****
+        // tags = resp.types
+        $('#myModal').modal();
+        $('#modalYes').on('click',function(){
+          $('#btnText').focus();
+          var getTextField=$("#btnText").val();
+          $("#btnText").val("");
+          console.log(getTextField);
+          
+          for (var i = 0; i < tags.length; i++) {
+              if(tags[i].text === getTextField.toLowerCase()){
+                index = i
+              }
+            }
+          tags.splice(index, 1)
+          $.ajax({
+      url:'data/create_json2',
+      type:"POST",
+      data:JSON.stringify({ 'text' : temp }),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+    }).done();
+    location.reload(true);
+
+     });
+      });
+ 
+      });
+
+  </script>
+
+  <div style="padding-top: 140px;">
+    <span> id: </span>
+    <span class="id_field" style="padding-right: 10px;font-weight: bold;"
+    data-bind="text: id"></span>
+
+    <span style="padding: 3px 7px;">- Keyboard Shortcuts: </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> t </span>
+    <span style="padding: 3px 5px;"> tag </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> u </span>
+    <span style="padding: 3px 5px;"> untag </span>
+
+    <span style="padding: 3px 7px;">Switch Type: </span>    
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> ← </span>
+    <span style="padding: 3px 5px;"> Left </span>
+
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> → </span>
+    <span style="padding: 3px 5px;"> Right </span>
+  </div>
+
+</div>
+
+
+
+
+<div tabindex="0" class="markup-container unselectable" style="margin-top: 100px;margin-bottom: 75px;"
+     data-bind="event: { 'keydown': checkKey }">
+</div>
+
+<hr />
+
+<div style="margin: 10px; position: absolute;bottom: 10px;">
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-primary" data-bind="click: navigate_prev">
+      <span class="glyphicon glyphicon-arrow-left"></span> 
+    </button>
+  </div>
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-primary" data-bind="click: navigate_home">Home</button>
+  </div>
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-primary" data-bind="click: navigate_next">
+      <span class="glyphicon glyphicon-arrow-right"></span> 
+    </button>
+  </div>
+</div>

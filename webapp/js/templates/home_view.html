@@ -1,0 +1,301 @@
+
+
+<div style="margin: 10px;height:calc(100% - 10px);">
+
+  <div style="height: 215px;">
+    <div style="margin-left: 10px;">
+      <div style="display:inline-block;padding-right: 20px;vertical-align: top;">
+        <h4>Training Samples</h4> 
+        <input type="text" data-bind="value: fileName, style: { display: filenameEditing() ? '' : 'none' }, valueUpdate: 'afterkeydown'"></input>
+       <span data-bind="style: { display: filenameEditing() ? 'none' : '' }, text: fileName">edit</span>
+        <span data-bind="click: toggleFilename" class="glyphicon glyphicon-pencil"></span>
+      </div>
+    </div>
+
+    <div style="padding: 44px 10px; display:inline-block;vertical-align: top;">
+      <span> Total: </span>
+    </div>
+    <div style="display:inline-block;padding-right: 20px;vertical-align: top;margin-top: 55px;">
+      <span style="font-size: 54px" data-bind="html: total"></span>
+    </div>
+
+    <div style="padding: 44px 10px; display:inline-block;vertical-align: top;">
+      <span> Trained: </span>
+    </div>
+
+    <div style="display:inline-block;padding-right: 20px;vertical-align: top;margin-top: 55px;">
+      <span style="font-size: 54px" data-bind="html: trained"></span>
+    </div>
+
+    <!-- <div style="display:inline-block;margin-right: 20px;"> -->
+
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: train">Train</button> -->
+    <!--   </div> -->
+
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: test_handler">Test</button> -->
+    <!--   </div> -->
+      
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: save">Save Model</button> -->
+    <!--   </div> -->
+
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <div style="display: inline-block;padding: 5px;" -->
+    <!--          class="btn-size" -->
+    <!--          data-bind="html: result_msg, css: result_msg_class"> testing  </div> -->
+    <!--   </div> -->
+
+    <!-- </div> -->
+    <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_upload">Import Training</button>
+      </div>
+
+
+      <!--
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save_spacy">Save in Spacy</button>
+      </div>
+    -->
+      
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save">Download Training</button>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: resetTraining">Clear all tags</button>
+      </div>
+
+    </div>
+
+    <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
+
+      <!--
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_complete_handler">Training Complete</button>
+      </div>
+    -->
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" id = "trainModel">Train Model</button>
+      </div>
+
+ 
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" id = "testModel" >Test Model</button>
+      </div>
+    
+      
+
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size"  data-bind="click: download_spacy">Download Model</button>
+      </div>
+
+
+      
+
+
+      <!--
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save_server">Save to Server</button>
+      </div>
+      -->
+
+      <div style="margin-bottom: 12px;visibility: hidden;">
+        <!-- empty button for spacing -->
+        <!-- <button class="btn btn-default btn-size">spacer</button> -->
+      </div>
+
+      
+
+    </div>
+
+
+    <div class="modal fade" id="myModal1" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Training Parameters</h4>
+          </div>
+          <div class="modal-body">
+              <input type="radio" id = "scratch" name="yes" value="Train from scratch"> New Model  <br>
+              <input type="radio" id = "update" name="yes" value="Update default"> Update Model  
+              <br><br>
+              <!-- <label id = "loadLabel" style="display:none" for="male">Load Model</label> -->
+              <div class="form-group"  id="loadText" style="display:none">
+                  <label for="sel1">Load Model</label>
+                  <select class="form-control" id="sel1">
+                    <option>Model_1</option>
+                    <option>Model_2</option>
+                    <option>Model_3</option>
+                    <option>Model_4</option>
+                  </select>
+              </div>
+              <!-- <input type="text"  id="loadText" class="form-control" style="display:none" placeholder=""></span><br> -->
+              <label id = "saveLabel"  for="male">Name Model </label>
+              <input type="text"  id="path_to" class="form-control" placeholder=""></span><br>
+              <label id = "iterLabel" for="male">Number of Iteration</label>
+              <input type="text"  id="iter" class="form-control" placeholder="50"></span><br>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="modalTrain" class="btn btn-default" data-dismiss="modal" data-bind="click: train_spacy">Train</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="testModal" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+                  <label for="sel1">Load Model</label>
+                  <select class="form-control" id="sel2">
+                    <option>Model_1</option>
+                    <option>Model_2</option>
+                    <option>Model_3</option>
+                    <option>Model_4</option>
+                  </select>
+              </div>
+            <label id = "saveLabel"  for="male"> Text to predict </label>
+            <input type = "text" id = "input_text" class="form-control" placeholder="My name is Akshay"></span><br>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="predictButton" class="btn btn-default" data-dismiss="modal" data-bind="click: test_spacy">Predict</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="display:inline-block;margin-right: 200px;vertical-align: top;">
+      
+      
+      
+
+     
+
+      
+
+
+    </div>
+      <input id= "tagger" disabled type="checkbox" name="tagger" onclick=onClickHandler()> <b>TAG FOR ME</b><br>
+
+      <script>
+
+
+
+
+
+        $('#update').click(function() {
+   if($('#update').is(':checked')) {
+
+
+     
+
+
+
+     $('#loadText').css('display','block');
+     $('#loadLabel').css('display','block');
+      }
+});
+
+$('#scratch').click(function() {
+   if($('#scratch').is(':checked')) {
+     $('#loadText').css('display','none');
+     $('#loadLabel').css('display','none');
+      }
+});
+
+$('#trainModel').click(function() {
+
+ $.ajax({
+          url:'data/find_models',
+          type:"POST",
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          data:JSON.stringify({ 'text' : "" }),
+    }).done(function(result){
+      var options = [];
+      options.push('<option value="-1">--Select--</option>');
+      for (var i = 0; i < result.length; i++) {
+        options.push('<option value="',
+          result[i], '">',
+          result[i], '</option>');
+      }
+      // alert(resp)
+      $("#sel1").html(options.join(''));
+    });
+
+
+$('#myModal1').modal();
+});
+
+$('#testModel').click(function() {
+
+
+ $.ajax({
+          url:'data/find_models',
+          type:"POST",
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          data:JSON.stringify({ 'text' : "" }),
+    }).done(function(result){
+      var options = [];
+      options.push('<option value="-1">--Select--</option>');
+      for (var i = 0; i < result.length; i++) {
+        options.push('<option value="',
+          result[i], '">',
+          result[i], '</option>');
+      }
+      // alert(resp)
+      $("#sel2").html(options.join(''));
+
+
+
+
+    });
+
+
+$('#testModal').modal();
+});
+
+
+
+
+
+
+        localStorage.setItem("isPrediction", "false");
+          function onClickHandler(){
+              var chk=document.getElementById("tagger").checked
+              localStorage.setItem("isPrediction", chk);
+              
+              //use this value
+          
+          }
+          </script>
+  </div>
+
+  
+
+  <hr style="margin-top: 9px; margin-bottom: 10px;" />
+
+  <div class="table-container" style="height:calc(100% - 225px);overflow-y: scroll;"></div>
+
+</div>
+
+<input id="fileupload" name="file" type="file"
+       accept="text/csv,text/tab-separated-values,application/json,text/plain"
+       style="opacity: 0;" />
