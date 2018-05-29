@@ -164,7 +164,7 @@ def parse_tsv(*args, **kwargs):
     results = []
     for arr in text:
         _id = arr[0]
-        body = str(arr[1])
+        body = arr[1].encode('utf-8')
         sample = createTraining(body, _id)
         results.append(sample)
     return json.dumps({'trainings': results})
