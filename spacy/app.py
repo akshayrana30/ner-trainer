@@ -1,6 +1,5 @@
 import Spacy_Train
 import Spacy_Train2
-import CRF_Train
 import shutil
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
