@@ -54,12 +54,12 @@ document.oncontextmenu = function(){ return false; };
 requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'app/tag-types','app/class-tag-types', 'app/css','jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, tag_types,  class_tag_types,  css, $){
 
   ko.applyBindings(main_window, $('body')[0]);
-  // tag_types.init().done(function(){
-  //   css.refreshRules();
-  // });
-  class_tag_types.init().done(function(){
+  tag_types.init().done(function(){
     css.refreshRules();
   });
+  // class_tag_types.init().done(function(){
+  //   css.refreshRules();
+  // });
 
   var DEFAULT_HASH = routes.HOME();
 

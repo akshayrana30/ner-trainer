@@ -37,9 +37,7 @@ define(['underscore-contrib','d3','jquery'], function(_, d3, $){
       data:JSON.stringify({ 'types' : tags }),
       contentType:"application/json; charset=utf-8",
       dataType:"json"
-    }).done(function(resp){
-      console.log("Akshay Rana");
-      
+    }).done(function(resp){      
       console.log(resp);
     });
   };

@@ -193,7 +193,7 @@ def create_json2(*args, **kwargs):
 # #POST /data/find_models  
 def find_models(*args, **kwargs):
     import os
-    list_models = os.listdir("../Models")
+    list_models = os.listdir("../models")
     return list_models
 
 def tokenize_with_offsets_mod(text):

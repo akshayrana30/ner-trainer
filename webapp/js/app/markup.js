@@ -104,10 +104,10 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       console.log(" --- INSIDE JS ---")
       var entity_types = ko.observableArray(tag_types.getTags());
       console.log(entity_types)
-      // var class_types = ko.observableArray(class_tag_types.getTags());
-      // console.log(class_types)
+      var class_types = ko.observableArray(class_tag_types.getTags());
+      console.log(class_types)
 
-      // var classify_types = ko.observableArray(class_tag_types.getTags());
+      var classify_types = ko.observableArray(class_tag_types.getTags());
 
       var currentType = ko.observable(_.first(tag_types.getTags()));
       var setSelectedType = function(type){
